@@ -84,12 +84,12 @@ namespace GemGenerator
             else
             {
                 // Parse the bounds
-                string[] intsStrings = fields[0].Split('|');
+                string[] intsStrings = fields[0].Split('-');
                 lowBound = Int32.Parse(intsStrings[0]);
                 highBound = Int32.Parse(intsStrings[1]);
 
                 // Parse the costs
-                intsStrings = fields[1].Split('|');
+                intsStrings = fields[1].Split('-');
                 lowCost = Int32.Parse(intsStrings[0]);
                 highCost = Int32.Parse(intsStrings[1]);
 
@@ -116,6 +116,16 @@ namespace GemGenerator
 
             // return the list
             return list;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("Bounds: {0} - {1}\n" +
+                    "Worth: {2} - {3} (Avg: {4})\n" +
+                    "Examples: {5}",
+                    lowBound, highBound,
+                    lowCost, highCost, averageCost,
+                    String.Join(" ", examples.ToArray()));
         }
 
     }
