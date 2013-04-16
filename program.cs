@@ -1,5 +1,6 @@
 using System;
 using GemGenerator;
+using System.IO;
 
 namespace GemGenerator
 {
@@ -7,10 +8,17 @@ namespace GemGenerator
     {
         static public void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-            GemEntry entry = new GemEntry();
+            string filename = "data/gems.dat";
+            Console.WriteLine("Reading from" + filename);
 
-            Console.WriteLine(entry.AverageWorth);
+            StreamReader file = new StreamReader(filename);
+
+            // Test the GemEntry with a line from the data file
+            GemEntry entry = new GemEntry(file.ReadLine());
+
+            Console.WriteLine(entry);
+
+            file.Close();
 
             return;
         }
