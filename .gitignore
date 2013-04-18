@@ -1,6 +1,9 @@
 # remove swap files
 *~
 
+# Remove wierd file
+data/gems.dat.un~
+
 # keep debugs out of git
 *.mdb
 
