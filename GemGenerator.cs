@@ -1,13 +1,134 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
+using System.IO;
 
 namespace GemGenerator
 {
     public class GemGenerator
     {
+        private static Random rand = null;
+        private List<GemEntry> entries;
 
+        public GemGenerator(string filename)
+        {
+            // If there isn't a random class, make a new one
+            if (rand == null) rand = new Random();
+
+            entries = parseFile(filename);
+        }
+
+        public GemResult GenerateGem(int maxValue = -1)
+        {
+            // Get the lower and upper bounds
+            int minBound = Int32.MaxValue,
+                maxBound = Int32.MinValue;
+            foreach (GemEntry e in entries)
+            {
+                if (e.LowerBound < minBound)
+                    minBound = e.LowerBound;
+
+                if (e.HigherBound > maxBound)
+                    maxBound = e.HigherBound;
+            }
+
+            GemResult result = null;
+
+            do
+            {
+                // Get a random value and see which entry it matches
+                int randInt = rand.Next(minBound, maxBound);
+
+                GemEntry entry = null;
+                for (int i = 0; i < entries.Count && entry == null; i++)
+                {
+                    if (randInt >= entries[i].LowerBound && randInt <= entries[i].HigherBound)
+                    {
+                        entry = entries[i];
+                    }
+                }
+
+                randInt = rand.Next(entry.MinWorth, entry.MaxWorth);
+                string desc = entry.Examples[rand.Next(entry.Examples.Count)]; 
+
+                result = new GemResult(randInt, desc);
+            }
+            while ( maxValue != -1 && result.Worth > maxValue);
+
+            return result;
+        }
+
+        private List<GemEntry> parseFile(string filename)
+        {
+            List<GemEntry> results = new List<GemEntry>();
+
+            StreamReader file = new StreamReader(filename);
+
+            string line;
+            while(file.Peek() != -1)
+            {
+                line = file.ReadLine();
+
+                try
+                {
+                    results.Add(new GemEntry(line));
+                }
+                catch (Exception ex)
+                {
+                    // Don't worry about errors, just skip the line
+                }
+            }
+
+            file.Close();
+
+            return results;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (GemEntry g in entries)
+            {
+                sb.AppendLine(g.ToString());
+            }
+
+            return sb.ToString();
+        }
     }
 
+    public class GemResult
+    {
+        private int worth;
+        public int Worth
+        {
+            get { return worth; }
+            // Make sure worth is not negative
+            private set
+            {
+                if (value >= 0)
+                    worth = value;
+                else
+                    throw new Exception("Worth cannot be negative!");
+            }
+        }
+        private string description;
+        public string Description
+        {
+            get { return description; }
+            private set { description = value; }
+        }
+
+        public GemResult(int worth, string description)
+        {
+            Worth = worth;
+            Description = description;
+        }
+
+        public override string ToString()
+        {
+            return String.Format("A {0} worth {1}", description, worth);
+        }
+    }
     public class GemEntry
     {
         private int lowBound;
@@ -111,7 +232,8 @@ namespace GemGenerator
 
             foreach(string s in results)
             {
-                list.Add(s.Trim());
+                if (s != String.Empty)
+                    list.Add(s.Trim());
             }
 
             // return the list

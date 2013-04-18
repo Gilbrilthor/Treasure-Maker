@@ -11,14 +11,27 @@ namespace GemGenerator
             string filename = "data/gems.dat";
             Console.WriteLine("Reading from" + filename);
 
-            StreamReader file = new StreamReader(filename);
+            // Test the parsing of a file
+            GemGenerator gen = new GemGenerator(filename);
 
-            // Test the GemEntry with a line from the data file
-            GemEntry entry = new GemEntry(file.ReadLine());
+            Console.WriteLine(gen);
 
-            Console.WriteLine(entry);
-
-            file.Close();
+            Console.WriteLine("Testing for empty Strings...");
+            for (int i = 0; i < 1000; i++)
+            {
+                GemResult result = gen.GenerateGem();
+                if (result.Description == String.Empty)
+                    Console.WriteLine(result);
+            }
+            Console.WriteLine("Finished!");
+            Console.WriteLine("Testing for max value limits...");
+            for (int i = 1; i < 1000; i++)
+            {
+                GemResult result = gen.GenerateGem(i * 10);
+                if (result.Worth > i * 10)
+                    Console.WriteLine("Error! Results worth ({0}) is greater than {1}!", result.Worth, i * 10);
+            }
+            Console.WriteLine("Finished!");
 
             return;
         }
