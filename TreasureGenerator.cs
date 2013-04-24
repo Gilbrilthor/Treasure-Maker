@@ -73,7 +73,7 @@ namespace TreasureGenerator
                 {
                     results.Add(new TreasureEntry(line));
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Don't worry about errors, just skip the line
                 }
