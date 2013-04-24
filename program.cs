@@ -1,6 +1,5 @@
 using System;
 using TreasureGenerator;
-using ConsoleMenu;
 using ConsoleHelper;
 using System.Collections.Generic;
 using System.IO;
