@@ -82,19 +82,21 @@ namespace ConsoleHelper
 
         private MenuItem QuitOption
         {
-            get { return new MenuItem(menuItems.Count, "Quit", null); }
+            get { return new MenuItem(menuItems.Count, QuitText, null); }
         }
 
         public string Header { get; set; }
+        public string QuitText { get; set; }
 
         public Menu()
         {
             menuItems = new SortedList<int, MenuItem>();
             menuItems.Add(0, new MenuItem(0, "Quit", null));
             Header = "What would you like to do?";
+            QuitText = "Quit";
         }
 
-        public Menu(IEnumerable<MenuItem> menuItems, string header = null)
+        public Menu(IEnumerable<MenuItem> menuItems, string header = null, string quitText = null)
         {
             this.menuItems = new SortedList<int, MenuItem>();
 
@@ -105,6 +107,11 @@ namespace ConsoleHelper
                 Header = "What would you like to do?";
             else
                 Header = header;
+
+            if (quitText == null)
+                QuitText = "Quit";
+            else
+                QuitText = quitText;
         }
         
 
