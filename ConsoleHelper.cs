@@ -132,7 +132,7 @@ namespace ConsoleHelper
             Console.WriteLine("Finished Testing getMenuChoice");
         }
 
-        public void RunMenu(bool repeat = true)
+        public void RunMenu(bool repeat = true, bool wait = true)
         {
             MenuItem choice = null;
 
@@ -141,7 +141,7 @@ namespace ConsoleHelper
                 DisplayMenu();
                 choice = getMenuChoice();
                 choice.Execute();
-                if (choice != QuitOption)
+                if (wait && choice != QuitOption)
                     Helper.WaitForKey();
 
             } while (repeat && choice != QuitOption);
